@@ -1,0 +1,12 @@
+name: 'Gradle build'
+description: 'Runs gradle-build-action adding --no-daemon'
+inputs:
+  arguments:
+    description: 'Arguments to pass to gradle-build-action'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: gradle/gradle-build-action@v2
+      with:
+        arguments: --no-daemon ${{ inputs.arguments }}

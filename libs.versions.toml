@@ -1,0 +1,7 @@
+[versions]
+nexus-publish = "1.3.0"
+spotless = "6.10.0"
+[libraries]
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus-publish"}
