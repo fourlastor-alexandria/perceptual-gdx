@@ -1,0 +1,11 @@
+repos:
+  - repo: local
+    hooks:
+      - id: spotless
+        name: Reformat files
+        entry: gradlew
+        args:
+          - spotlessApply
+        language: script
+        files: \.java$
+        pass_filenames: false
