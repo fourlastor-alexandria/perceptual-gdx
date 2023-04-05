@@ -20,10 +20,14 @@ package io.github.fourlastor.perceptual;
  * percentages everywhere, so these functions take a percentage in and express
  * a percentage out. So in the previous example, perceptualToAmplitude(50%) = 3%.
  * Second, we allow users to boost the volume of other users, and we use a different
- * scale for perceived > 100%. We scale these to a different "boost" range.
+ * scale for perceived &gt; 100%. We scale these to a different "boost" range.
  */
 public final class Perceptual {
+
+    /** Default standard volume range, in dB. */
     public static float DEFAULT_VOLUME_DYNAMIC_RANGE_DB = 50;
+
+    /** Default boost volume range, in dB. */
     public static float DEFAULT_VOLUME_BOOST_DYNAMIC_RANGE_DB = 6;
 
     private Perceptual() {}
