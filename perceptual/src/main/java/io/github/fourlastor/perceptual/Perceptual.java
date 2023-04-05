@@ -23,7 +23,6 @@ package io.github.fourlastor.perceptual;
  * scale for perceived > 100%. We scale these to a different "boost" range.
  */
 public final class Perceptual {
-    public static final float DEFAULT_NORMALIZED_MAX = 1f;
     public static float DEFAULT_VOLUME_DYNAMIC_RANGE_DB = 50;
     public static float DEFAULT_VOLUME_BOOST_DYNAMIC_RANGE_DB = 6;
 
@@ -43,79 +42,75 @@ public final class Perceptual {
     /**
      * Takes a user-presented control value and converts to amplitude
      *
-     * @param perceptual Number between 0 and 2 * normalizedMax
-     * @param range Dynamic range of perceptual value from 0 to normalizedMax
-     * @param boostRange Dynamic range of perceptual value from normalizedMax to 2 * normalizedMax
+     * @param perceptual Number between 0 and 2
+     * @param range      Dynamic range of perceptual value from 0 to 1
      * @return Number between 0 and 2
      */
-    public static float perceptualToAmplitude(float perceptual, float range, float boostRange) {
-        return perceptualToAmplitude(perceptual, DEFAULT_NORMALIZED_MAX, range, boostRange);
+    public static float perceptualToAmplitude(float perceptual, float range) {
+        return perceptualToAmplitude(perceptual, range, DEFAULT_VOLUME_BOOST_DYNAMIC_RANGE_DB);
     }
 
     /**
      * Takes a user-presented control value and converts to amplitude
      *
-     * @param perceptual Number between 0 and 2 * normalizedMax
-     * @param normalizedMax Normalization of perceptual value, choose 1 for decimals or 100 for percentages
-     * @param range Dynamic range of perceptual value from 0 to normalizedMax
-     * @param boostRange Dynamic range of perceptual value from normalizedMax to 2 * normalizedMax
-     * @return Number between 0 and 2 * normalizedMax
+     * @param perceptual Number between 0 and 2
+     * @param range      Dynamic range of perceptual value from 0 to 1
+     * @param boostRange Dynamic range of perceptual value from 1 to 2
+     * @return Number between 0 and 2
      */
-    public static float perceptualToAmplitude(float perceptual, float normalizedMax, float range, float boostRange) {
+    public static float perceptualToAmplitude(float perceptual, float range, float boostRange) {
         if (perceptual == 0) {
             return 0;
         }
         float db;
-        if (perceptual > normalizedMax) {
-            db = ((perceptual - normalizedMax) / normalizedMax) * boostRange;
+        if (perceptual > 1f) {
+            db = (perceptual - 1f) * boostRange;
         } else {
-            db = (perceptual / normalizedMax) * range - range;
+            db = (perceptual) * range - range;
         }
-        return (float) (normalizedMax * Math.pow(10, db / 20));
+        return (float) Math.pow(10, db / 20);
     }
 
     /**
      * Takes a volume amplitude and converts to user-presented control
      *
-     * @param amp  Number between 0 and 2
+     * @param amplitude  Number between 0 and 2
      * @return Number between 0 and 2
      */
-    public static float amplitudeToPerceptual(float amp) {
-        return amplitudeToPerceptual(amp, DEFAULT_VOLUME_DYNAMIC_RANGE_DB, DEFAULT_VOLUME_BOOST_DYNAMIC_RANGE_DB);
+    public static float amplitudeToPerceptual(float amplitude) {
+        return amplitudeToPerceptual(amplitude, DEFAULT_VOLUME_DYNAMIC_RANGE_DB, DEFAULT_VOLUME_BOOST_DYNAMIC_RANGE_DB);
     }
 
     /**
      * Takes a volume amplitude and converts to user-presented control
      *
-     * @param amp Number between 0 and 2
-     * @param range Dynamic range of amp value from 0 to normalizedMax
-     * @param boostRange Dynamic range of amp value from normalizedMax to 2 * normalizedMax
+     * @param amplitude Number between 0 and 2
+     * @param range     Dynamic range of amplitude value from 0 to 1
      * @return Number between 0 and 2
      */
-    public static float amplitudeToPerceptual(float amp, float range, float boostRange) {
-        return amplitudeToPerceptual(amp, DEFAULT_NORMALIZED_MAX, range, boostRange);
+    public static float amplitudeToPerceptual(float amplitude, float range) {
+        return amplitudeToPerceptual(amplitude, range, DEFAULT_VOLUME_BOOST_DYNAMIC_RANGE_DB);
     }
 
     /**
      * Takes a volume amplitude and converts to user-presented control
      *
-     * @param amp Number between 0 and 2 * normalizedMax
-     * @param normalizedMax Normalization of amp value, choose 1 for decimals or 100 for percentages
-     * @param range Dynamic range of amp value from 0 to normalizedMax
-     * @param boostRange Dynamic range of amp value from normalizedMax to 2 * normalizedMax
-     * @return Number between 0 and 2 * normalizedMax
+     * @param amplitude        Number between 0 and 2
+     * @param range      Dynamic range of amplitude value from 0 to 1
+     * @param boostRange Dynamic range of amplitude value from 1 to 2
+     * @return Number between 0 and 2
      */
-    public static float amplitudeToPerceptual(float amp, float normalizedMax, float range, float boostRange) {
-        if (amp == 0) {
+    public static float amplitudeToPerceptual(float amplitude, float range, float boostRange) {
+        if (amplitude == 0) {
             return 0;
         }
-        float db = (float) (20 * Math.log10(amp / normalizedMax));
+        float db = (float) (20 * Math.log10(amplitude));
         float perceptual;
         if (db > 0) {
             perceptual = db / boostRange + 1;
         } else {
             perceptual = (range + db) / range;
         }
-        return normalizedMax * perceptual;
+        return perceptual;
     }
 }

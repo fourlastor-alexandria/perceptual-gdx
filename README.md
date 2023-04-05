@@ -1,11 +1,6 @@
-perceptual
-=============
+# Perceptual
 
-Have you ever encountered a website with video or music that was too loud and moved the volume slider down halfway, only to discover it was still basically as loud as before you moved the slider? The most common approach taken by developers building these interfaces is to apply the position of the slider as a multiplier on the sound’s amplitude. Unfortunately, this approach doesn’t yield even loudness changes across the slider’s full range. Enter perceptual.
-
-Convert volume slider fractions to amplitudes and nothing more.
-
-[Try the demo](https://discord.github.io/perceptual/)
+This is a port of Discord's [perceptual](https://www.github.com/discord/perceptual/) to Java.
 
 ## Theory
 
@@ -22,10 +17,10 @@ There are two more things to note. First, we'll express everything as percentage
 
 If you have a volume slider or other control which returns a Number from 0 to 1, the following will convert the slider's position to an amplitude.
 
-```js
-> var perceptual = require('@discordapp/perceptual')
-> perceptual.perceptualToAmplitude(0.5)
-0.056234132519034905
+```java
+float sliderValue = 0.5;
+Perceptual.perceptualToAmplitude(sliderValue);
+// 0.056234132519034905
 ```
 
 This tells us that the corresponding amplitude that will be perceived as 50% as loud is about 5.6%. By default, this method uses a 50dB range.
@@ -34,9 +29,9 @@ From here we can apply this amplitude value (0.056234) to the source, e.g. to th
 
 As a second example,
 
-```js
-> perceptual.perceptualToAmplitude(50, 100, 60)
-3.162277660168379
+```java
+Perceptual.perceptualToAmplitude(50, 100, 60);
+// 3.162277660168379
 ```
 
 This supplies a `normalizedMax` argument to specify that we want a range from 0 to 100 instead. It also supplies a non-default dynamic range of 60dB. For these settings, 50% of the loudness corresponds to 3.2% of the amplitude.
